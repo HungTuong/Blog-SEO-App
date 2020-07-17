@@ -54,7 +54,7 @@ export const removeCookie = (key) => {
 // Get cookie
 export const getCookie = (key) => {
     if(process.browser){
-        cookie.get(key);
+        return cookie.get(key);
     }
 };
 
@@ -80,8 +80,9 @@ export const authenticate = (data, next) => {
 
 export const isAuth = () => {
     if(process.browser){
-        const cookieChecked = getCookie('token')
+        const cookieChecked = getCookie('token');
         if(cookieChecked){
+            console.log(localStorage.getItem('user'))
             if(localStorage.getItem('user')){
                 return JSON.parse(localStorage.getItem('user'));
             }else{
