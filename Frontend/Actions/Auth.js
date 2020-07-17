@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import cookie, { remove } from 'js-cookie';
 import { API } from '../config';
 
 export const signup = user => {
@@ -32,3 +33,77 @@ export const signin = user => {
         })
         .catch(err => console.log(err));
 };
+
+//set cookie
+export const setCookie = (key, value) => {
+    if(process.browser){
+        cookie.set(key, value, {
+            expires: 1
+        });
+    }
+};
+
+export const removeCookie = (key) => {
+    if(process.browser){
+        cookie.remove(key, {
+            expires: 1
+        });
+    }
+};
+
+// Get cookie
+export const getCookie = (key) => {
+    if(process.browser){
+        cookie.get(key);
+    }
+};
+
+// localStorage
+export const setLocalStorage = (key, value) => {
+    if(process.browser){
+        localStorage.setItem(key, JSON.stringify())
+    }
+}
+
+export const removeLocalStorage = (key, value) => {
+    if(process.browser){
+        localStorage.removeItem(key)
+    }
+}
+
+// authenticate user by passing data to cookie and localstorage
+export const authenticate = (data, next) => {
+    setCookie('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    next();
+};
+
+export const isAuth = () => {
+    if(process.browser){
+        const cookieChecked = getCookie('token')
+        if(cookieChecked){
+            if(localStorage.getItem('user')){
+                return JSON.parse(localStorage.getItem('user'));
+            }else{
+                return false;
+            }
+        }
+    }
+}
+
+// remove cookie and localStorage user when sign out
+export const signout = (next) => {
+    removeCookie('token');
+    removeLocalStorage('user');
+    next();
+
+    return fetch(`${API}/signout`, {
+        method: 'GET'
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
