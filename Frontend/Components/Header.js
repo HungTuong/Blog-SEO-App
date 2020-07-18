@@ -87,7 +87,7 @@ const Header = (props) => {
                   <NavLink >
                     {`${isAuth().name}'s Dashboard `}
                   </NavLink>
-                </Link>
+                </Link> 
               </NavItem>
             )}
             {isAuth() && (
