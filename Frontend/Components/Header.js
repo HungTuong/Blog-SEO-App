@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { APP_NAME } from '../config';
 import { signout, isAuth } from '../Actions/Auth';
-import { Router } from 'next/router';
+import Router from 'next/router';
 import {
   Collapse,
   Navbar,
@@ -71,6 +71,24 @@ const Header = (props) => {
                 </Link>
               </NavItem>
             </React.Fragment>
+            )}
+            {isAuth() && isAuth().role === 0 && (
+              <NavItem>
+                <Link href='/user'>
+                  <NavLink >
+                    {`${isAuth().name}'s Dashboard `}
+                  </NavLink>
+                </Link>
+              </NavItem>
+            )}
+            {isAuth() && isAuth().role === 1 && (
+              <NavItem>
+                <Link href='/admin'>
+                  <NavLink >
+                    {`${isAuth().name}'s Dashboard `}
+                  </NavLink>
+                </Link>
+              </NavItem>
             )}
             {isAuth() && (
               <NavItem>
